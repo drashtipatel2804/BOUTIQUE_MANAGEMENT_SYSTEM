@@ -1,0 +1,51 @@
+/*html, body {
+    font-family: Raleway, sans-serif;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    flex-wrap: nowrap; 
+    overflow: hidden;
+}
+
+.search-box{
+    font-size: 20px;
+    border: solid 0.3em;
+    display: inline-block;
+    position: relative;
+    border-radius: 2.5em;
+}
+
+.search-box input[type=text] {
+    font-family: inherit;
+    font-weight: bold;
+    width: 2.5em;
+    height: 2.5em;
+    padding: 0.3em 2.1em 0.4em;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 2.5em;
+}    */
+
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0;
+}
+
+.icon-container {
+  font-size: 48px;
+  color: #333;
+}
+
