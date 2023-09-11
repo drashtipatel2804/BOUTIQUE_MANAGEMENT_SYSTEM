@@ -33,8 +33,7 @@ if (isset($_SESSION['email'])) {
         $loginResult = mysqli_query($con, $loginQuery);
 
         if (mysqli_num_rows($loginResult) == 1) {
-
-
+            
             if (mysqli_num_rows($loginResult) > 0) {
                 while ($row = mysqli_fetch_assoc($loginResult)) {
                     $role = $row["role"];
