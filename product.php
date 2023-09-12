@@ -7,13 +7,13 @@ if (isset($_POST['add'])) {
     $color_name = $_POST['color'];
     $fabric_name = $_POST['fabric'];
     $price = $_POST['price'];
-    
-    $category_id =  $_POST['category'];
-    
+
+    $category_id = $_POST['category'];
+
     $size_id = $_POST['size'];
     $color_id = $_POST['color'];
     $fabric_id = $_POST['fabric'];
-     $image1Path = '';
+    $image1Path = '';
     $image2Path = '';
 
     if (isset($_FILES['image1'])) {
@@ -36,7 +36,6 @@ if (isset($_POST['add'])) {
 
     if (mysqli_query($con, $sql_insert)) {
         // Insertion successful
-        
     } else {
         // Insertion failed
         echo "Error: " . mysqli_error($con);
@@ -53,7 +52,7 @@ if (isset($_POST['add'])) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+JmjzX2n/rw6Uj1j1lsofmUHCbUG5H8b5W5RdI5bh6WQFZf" crossorigin="anonymous">
         <link rel="stylesheet" href="CSS/product.css">
         <style>
-          
+
             .background-container {
                 position: fixed;
                 top: 0;
@@ -93,7 +92,7 @@ if (isset($_POST['add'])) {
         </style>
     </head>
     <body>
-        
+
 
         <div class="background-container"></div>
         <div class="container mt-5">
@@ -114,7 +113,7 @@ if (isset($_POST['add'])) {
                                     <label for="category" class="form-label">Category</label>
                                     <select class="form-control dropdown" id="category" name="category">
                                         <option value="0">--Select Category--</option>
-                                        <?php                                      
+                                        <?php
                                         $sql_cat = "SELECT * FROM tblcategory";
                                         $result_cat = $con->query($sql_cat);
 
@@ -134,8 +133,8 @@ if (isset($_POST['add'])) {
                                 <div class="mb-3">
                                     <label for="size" class="form-label">Size</label>
                                     <select class="form-control dropdown" id="size" name="size">
-                                         <option value="0">--Select Size--</option>
-                                        <?php                                      
+                                        <option value="0">--Select Size--</option>
+                                        <?php
                                         $sql_size = "SELECT * FROM tblsize";
                                         $result_size = $con->query($sql_size);
 
@@ -154,7 +153,7 @@ if (isset($_POST['add'])) {
                                     <label for="color" class="form-label">Color</label>
                                     <select class="form-control dropdown" id="color" name="color">
                                         <option value="0">--Select Color--</option>
-                                        <?php                                      
+                                        <?php
                                         $sql_color = "SELECT * FROM tblcolor";
                                         $result_color = $con->query($sql_color);
 
@@ -174,8 +173,8 @@ if (isset($_POST['add'])) {
                                 <div class="mb-3">
                                     <label for="fabric" class="form-label">Fabric</label>
                                     <select class="form-control dropdown" id="fabric" name="fabric">
-                                       <option value="0">--Select Fabric--</option>
-                                        <?php                                      
+                                        <option value="0">--Select Fabric--</option>
+                                        <?php
                                         $sql_fabric = "SELECT * FROM tblfabric";
                                         $result_fabric = $con->query($sql_fabric);
 
@@ -312,15 +311,15 @@ if (isset($_POST['add'])) {
                 } else {
                     // Capture the file path for the 1st image if valid
                     image1Path = 'IMG/' + image1Input.files[0].name; // Modify the path as needed
-                     $.ajax({
-                    type: 'POST',
-                    url: 'insert_image1.php', // Replace with the correct URL for your 1st image insertion script
-                    data: { image1Path: image1Path },
-                    success: function(response) {
-                        // Handle the server response here
-                        console.log(response);
-                    }
-                });
+                    $.ajax({
+                        type: 'POST',
+                        url: 'insert_image1.php', // Replace with the correct URL for your 1st image insertion script
+                        data: {image1Path: image1Path},
+                        success: function (response) {
+                            // Handle the server response here
+                            console.log(response);
+                        }
+                    });
                 }
             }
 
@@ -336,17 +335,23 @@ if (isset($_POST['add'])) {
                     // Capture the file path for the 2nd image if valid
                     image2Path = 'IMG/' + image2Input.files[0].name; // Modify the path as needed
                     $.ajax({
-                    type: 'POST',
-                    url: 'insert_image2.php', // Replace with the correct URL for your 2nd image insertion script
-                    data: { image2Path: image2Path },
-                    success: function(response) {
-                        // Handle the server response here
-                     console.log(response);
-            }
-        });
+                        type: 'POST',
+                        url: 'insert_image2.php', // Replace with the correct URL for your 2nd image insertion script
+                        data: {image2Path: image2Path},
+                        success: function (response) {
+                            // Handle the server response here
+                            console.log(response);
+                        }
+                    });
                 }
             }
-            return isValid;
+            if (isValid) {
+                return true; // Prevent form submission
+            } else
+            {
+                return false;
+            }
+            
         }
     </script>
     <!-- Include Bootstrap JS and jQuery (optional) -->

@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 
@@ -6,15 +7,18 @@ $con = mysqli_connect("localhost", "root", "", "db_boutique");
 if (!$con) {
     die("Connection failed: " . mysqli_connect_error());
 }
+
 if (isset($_SESSION['email'])) {
     $email = $_SESSION['email'];
     $loginQuery = "SELECT * FROM tbluser WHERE email = '$email'";
     $loginResult = mysqli_query($con, $loginQuery);
+
     if (mysqli_num_rows($loginResult) > 0) {
         while ($row = mysqli_fetch_assoc($loginResult)) {
             $role = $row["role"];
         }
     }
+
     if ($role == "Customer") {
         header('Location: customer_dash.php');
     } else if ($role == "Admin") {
@@ -22,54 +26,45 @@ if (isset($_SESSION['email'])) {
     } else {
         header('Location: deliveryPerson.php');
     }
+
     exit();
 } else {
     if (isset($_POST['submit'])) {
         $email = $_POST['email'];
-        $_SESSION['email'] = $email;
         $password = $_POST['password'];
 
         $loginQuery = "SELECT * FROM tbluser WHERE email = '$email' AND password = '$password'";
         $loginResult = mysqli_query($con, $loginQuery);
 
         if (mysqli_num_rows($loginResult) == 1) {
-            
-            if (mysqli_num_rows($loginResult) > 0) {
-                while ($row = mysqli_fetch_assoc($loginResult)) {
-                    $role = $row["role"];
-                }
-            }
+            $row = mysqli_fetch_assoc($loginResult);
+            $_SESSION['email'] = $email;
+
             if (isset($_POST['remember_me'])) {
                 setcookie('emailcookie', $email);
                 setcookie('passwordcookie', $password);
-                if ($role == "Customer") {
-                    header('Location: customer_dash.php');
-                } else if ($role == "Admin") {
-                    header('Location: index.php');
-                } else {
-                    header('Location: deliveryPerson.php');
-                }
-                exit();
-            } else {
-                if ($role == "Customer") {
-                    header('Location: customer_dash.php');
-                } else if ($role == "Admin") {
-                    header('Location: index.php');
-                } else {
-                    header('Location: deliveryPerson.php');
-                }
-                exit();
             }
+
+            $role = $row['role'];
+
+            if ($role == "Customer") {
+                header('Location: customer_dash.php');
+            } else if ($role == "Admin") {
+                header('Location: index.php');
+            } else {
+                header('Location: deliveryPerson.php');
+            }
+            exit();
         } else {
-
             $_SESSION['error_message'] = "Invalid email address or password.";
-
             header("Location: login.php");
             exit();
         }
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -175,10 +170,21 @@ if (isset($_SESSION['email'])) {
                 if (email === "") {
                     emailError.innerHTML = "Please enter your Email Address.";
                     hasError = true;
+                } else if (!isValidEmail(email)) {
+                    emailError.innerHTML = "Please enter a valid email address.";
+                    hasError = true;
                 }
 
                 if (password === "") {
                     passwordError.innerHTML = "Please enter your password.";
+                    hasError = true;
+                }
+                var pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\/\\]).{8,}$/;
+
+
+                if (!pattern.test(password)) {
+                    passwordError.innerHTML = "Password must contain at least one digit, one lowercase letter, one uppercase letter, one special character, and be at least 8 characters long.";
+
                     hasError = true;
                 }
                 if (hasError) {
@@ -189,6 +195,10 @@ if (isset($_SESSION['email'])) {
                 }
 
 
+            }
+            function isValidEmail(email) {
+                var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return pattern.test(email);
             }
         </script>
     </body>
