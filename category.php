@@ -27,12 +27,12 @@ if (isset($_REQUEST['submit'])) {
         if ($isSimilar) {
             $err = "Category already exists";
         } else {
-            $query = "insert into tblcategory (name) values ('$name')";
+            $query = "insert into tblcategory (name,status) values ('$name',1)";
             mysqli_query($con, $query);
             $success = "Successfull add category";
         }
     } else {
-        $query = "insert into tblcategory (name) values ('$name')";
+        $query = "insert into tblcategory (name,status) values ('$name',1)";
         mysqli_query($con, $query);
         $success = "Successfull add category";
         header('Location: index.php');

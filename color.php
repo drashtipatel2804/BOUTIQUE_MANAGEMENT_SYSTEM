@@ -27,12 +27,12 @@ if (isset($_REQUEST['submit'])) {
         if ($isSimilar) {
             $err = "color already exists";
         } else {
-            $query = "insert into tblcolor (name) values ('$name')";
+            $query = "insert into tblcolor (name,status) values ('$name',1)";
             mysqli_query($con, $query);
             $success = "Successfull add color";
         }
     } else {
-        $query = "insert into tblcolor (name) values ('$name')";
+        $query = "insert into tblcolor (name,status) values ('$name',1)";
         mysqli_query($con, $query);
         $success = "Successfull add color";
         header('Location: index.php');

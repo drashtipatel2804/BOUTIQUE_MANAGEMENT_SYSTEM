@@ -27,12 +27,12 @@ if (isset($_REQUEST['submit'])) {
         if ($isSimilar) {
             $err = "Fabric already exists";
         } else {
-            $query = "insert into tblfabric(type) values ('$name')";
+            $query = "insert into tblfabric(type,status) values ('$name',1)";
             mysqli_query($con, $query);
             $success = "Successfull add fabric";
         }
     } else {
-        $query = "insert into tblfabric (type) values ('$name')";
+        $query = "insert into tblfabric (type,status) values ('$name',1)";
         mysqli_query($con, $query);
         $success = "Successfull add fabric";
         header('Location: index.php');

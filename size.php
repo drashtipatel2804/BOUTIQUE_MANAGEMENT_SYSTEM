@@ -30,12 +30,12 @@ if (isset($_REQUEST['submit'])) {
             if ($isSimilar) {
             $err = "Size already exists";
         } else {
-            $query = "INSERT INTO tblsize (name) VALUES ('$name')";
+            $query = "INSERT INTO tblsize (name,status) VALUES ('$name',1)";
             mysqli_query($con, $query);
             $success = "Successfully added size";
         }
     } else {
-        $query = "insert into tblsize (name) values ('$name')";
+        $query = "insert into tblsize (name,status) values ('$name',1)";
         mysqli_query($con, $query);
         $success = "Successfull add size";
         //header('Location: index.php');

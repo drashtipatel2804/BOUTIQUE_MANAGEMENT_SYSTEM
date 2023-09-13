@@ -31,8 +31,8 @@ if (isset($_POST['add'])) {
     }
 
     // Insert data into the database
-    $sql_insert = "INSERT INTO tblproduct (name, Categoryid, Colorid, Sizeid, Fabricid, price, ImgPath1, ImgPath2) 
-                   VALUES ('$product_name', '$category_id', '$color_id', '$size_id', '$fabric_id', '$price', '$image1Path', '$image2Path')";
+    $sql_insert = "INSERT INTO tblproduct (name, Categoryid, Colorid, Sizeid, Fabricid, price, ImgPath1, ImgPath2,status) 
+                   VALUES ('$product_name', '$category_id', '$color_id', '$size_id', '$fabric_id', '$price', '$image1Path', '$image2Path',1)";
 
     if (mysqli_query($con, $sql_insert)) {
         // Insertion successful
