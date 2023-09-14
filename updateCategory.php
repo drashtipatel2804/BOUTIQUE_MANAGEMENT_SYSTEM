@@ -1,14 +1,45 @@
 <?php
+require_once 'dbcon.php';
 session_start();
-if(isset($_SESSION['category_name']))
-{
-    $name=$_SESSION['category_name'];
+if (isset($_SESSION['category_name'])) {
+    $name = $_SESSION['category_name'];
+    $id = $_SESSION['id'];
+} else {
+    header("Location: viewCategory.php");
 }
-else
-{
-    
+if (isset($_REQUEST['submit'])) {
+    $newName = $_REQUEST['category'];
+
+    $sql = "SELECT * FROM tblcategory WHERE id != '$id'";
+    $result = mysqli_query($con, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        $isSimilar = false;
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $name1 = strtolower($row["name"]);
+            $newNameLower = strtolower($newName);
+
+            similar_text($newNameLower, $name1, $similarity);
+
+            if ($similarity >= 50) {
+                $isSimilar = true;
+                break; 
+            }
+        }
+
+        if ($isSimilar) {
+            $_SESSION['error'] = "Category name is too similar to an existing category.";
+        } else {
+            $query = "UPDATE tblcategory SET name = '$newName' WHERE id = '$id'";
+            mysqli_query($con, $query);
+            $_SESSION['success'] = "Category updated successfully";
+        }
+    }
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -65,18 +96,19 @@ else
         </style>
     </head>
     <body>
-       
+
         <div class="background-container"></div>
         <div class="container mt-5">
             <div class="row justify-content-center">
                 <div class="col-md-6">
+                    
                     <form method="post" action="" name="updateCategory" onsubmit="return validateForm()">
                         <div class="form-group">
                             <h2 style="text-align: center">Update Category</h2>
                             <div>
-                            <label for="name" style="margin-left: 10px">Category Name:</label>
-                            <input type="text" name="category" class="form-control" id="name" style="margin-left: 10px" value="<?php echo $name;?>">
-                            <span id="categoryError" class="error"></span>
+                                <label for="name" style="margin-left: 10px">Category Name:</label>
+                                <input type="text" name="category" class="form-control" id="name" style="margin-left: 10px" value="<?php echo $name; ?>">
+                                <span id="categoryError" class="error"></span>
                             </div>
                             <div class="btn_pos">
                                 <button type="submit" name="submit" class="btn btn-primary">Update</button>
@@ -84,6 +116,17 @@ else
                                     <a href="viewCategory.php" style="color: white">Cancel</a>
                                 </button>
                             </div>
+                            <div id="messageContainer">
+                        <?php
+                        if (isset($_SESSION['success'])) {
+                            echo "<div class='alert alert-success' style='color: green;'>{$_SESSION['success']}</div>";
+                            unset($_SESSION['success']); // Clear the message
+                        } elseif (isset($_SESSION['error'])) {
+                            echo "<div class='alert alert-danger' style='color: red;'>{$_SESSION['error']}</div>";
+                            unset($_SESSION['error']); // Clear the message
+                        }
+                        ?>
+                    </div>
                         </div>
                     </form>
                 </div>
@@ -92,7 +135,7 @@ else
 
         <script>
             function validateForm() {
-                
+
                 var category = document.forms["updateCategory"]["category"].value;
                 var isValid = true;
 

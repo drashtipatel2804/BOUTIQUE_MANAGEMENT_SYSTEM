@@ -1,137 +1,141 @@
 <?php
-include 'dbcon.php';
+require_once 'dbcon.php';
 session_start();
-if (isset($_REQUEST['update'])) {
-    if ($_SESSION['category_name']) {
-        header("Location: updateCategory.php");
-    } else {
+if (isset($_SESSION['category_name'])) {
+    $name = $_SESSION['category_name'];
+    $id = $_SESSION['id'];
+} else {
+    header("Location: viewCategory.php");
+}
+if (isset($_REQUEST['submit'])) {
+    $name = $_REQUEST['category'];
+    $uquery = "update tblcategory set name='$name' where id='$id'";
+    $query_run = mysqli_query($con, $uquery);
+
+    if ($query_run) {
+        $_SESSION['success'] = "Category updated successfully";
         header("Location: viewCategory.php");
+    } else {
+        $_SESSION['error'] = "Error updating category: " . mysqli_error($con);
     }
 }
-if (isset($_REQUEST['delete'])) {
-
-    $query = "SELECT * FROM tblcategory";
-    $query_run = mysqli_query($con, $query);
-
-    if (mysqli_num_rows($query_run) > 0) {
-        foreach ($query_run as $category) {
-
-            $categoryid = $category['id'];
-        }
-    }
-        $query_delete = "DELETE FROM tblcategory WHERE id = '$categoryid'";
-        $query_run_delete = mysqli_query($con, $query_delete);
-
-        if ($query_run_delete) {
-            // Deletion was successful, you can set a success message if needed
-            $_SESSION['success']= "Category deleted successfully";
-        } else {
-            // Deletion failed, you can set an error message if needed
-            $_SESSION['error'] = "Error deleting category" . mysqli_error($con);;
-        }
-    
-}
-
-
 ?>
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to edit this template
--->
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Update Category</title>
+        <!-- Include Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <title>View Category</title>
         <style>
-            .btn1{
-                float: right
+            body {
+                background-color: #f8f9fa;
+                overflow: hidden; /* Prevent scrolling */
             }
-
-            .content-wrapper {
-                margin-top: 5%;
-            }
-            .form-group{
+            .background-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                filter: blur(1px); /* Adjust the blur radius as needed */
                 background-image: url('IMG/bg.jpg'); /* Replace with the actual path to your image */
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
             }
-
+            .container {
+                padding: 20px;
+            }
+            .error{
+                color: #FF0000;
+                margin-left: 10px;
+            }
+            .form-group {
+                margin-top: 150px;
+                margin-bottom: 20px;
+                margin-left: 100px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0.3, 0.3, 0.3, 0.3);
+                width: 350px;
+                height: 250px;
+                background-color: #FFEEF4;
+            }
+            label {
+                font-weight: bold;
+            }
+            .form-control {
+                width: 300px;
+            }
+            .btn_pos{
+                margin-left: 110px;
+                margin-top: 20px;
+            }
         </style>
     </head>
     <body>
-        <?php
-// Check for success or error messages
-        if (isset($_SESSION['success'])) {
-            echo "<div class='alert alert-success'>{$_SESSION['success']}</div>";
-            unset($_SESSION['success']); // Clear the message
-        } elseif (isset($_SESSION['error'])) {
-            echo "<div class='alert alert-danger'>{$_SESSION['error']}</div>";
-            unset($_SESSION['error']); // Clear the message
-        }
-        ?>
 
-        <form method="post" action="" name="viewCategory">
-            <div class="content-wrapper ">
-                <section class="content ">
-                    <div class="container ">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-header mt-4">
-                                        <h1>Categories </h1>
-                                    </div>
-                                    <div class="card-body">
-                                        <table class="table table-bordered text-center" style="width:90%; margin: auto" >
-                                            <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Name</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
-                                                    <th>Active/De-Active</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                $query = "SELECT * FROM tblcategory";
-                                                $query_run = mysqli_query($con, $query);
-
-                                                if (mysqli_num_rows($query_run) > 0) {
-                                                    foreach ($query_run as $category) {
-                                                        $_SESSION['category_name'] = $category['name'];
-                                                        $categoryid = $category['id'];
-                                                        if($category['status']==1)
-                                                        {
-                                                            echo "<tr>";
-                                                            echo "<td>{$category['id']}</td>";
-                                                            echo "<td>{$category['name']}</td>";
-                                                            echo "<td><button class='btn btn-success' type='submit' name='update'>Update</a></button></td>";
-                                                            echo "<td><button class='btn btn-danger' type='submit' name='delete'>Delete</a></button></td>";
-                                                            echo "<td><button class='btn btn-success' type='submit' name='deActive'>De-Active</button></td>";
-                                                            echo "</tr>";
-                                                        }
-                                                        
-                                                    }
-                                                } else {
-                                                    echo "<tr>";
-                                                    echo "<td colspan='2'>No record found</td>";
-                                                    echo "<td colspan='3'>No any Operation</td>";
-                                                    echo "</tr>";
-                                                }
-                                                ?>
-
-
-                                            </tbody>   
-                                        </table>
-                                    </div>
-                                </div>
+        <div class="background-container"></div>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    
+                    <form method="post" action="" name="updateCategory" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <h2 style="text-align: center">Update Category</h2>
+                            <div>
+                                <label for="name" style="margin-left: 10px">Category Name:</label>
+                                <input type="text" name="category" class="form-control" id="name" style="margin-left: 10px" value="<?php echo $name; ?>">
+                                <span id="categoryError" class="error"></span>
                             </div>
-                        </div>
+                            <div class="btn_pos">
+                                <button type="submit" name="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" name="cancel" class="btn btn-danger">
+                                    <a href="viewCategory.php" style="color: white">Cancel</a>
+                                </button>
+                            </div>
+                            <div id="messageContainer">
+                        <?php
+                        if (isset($_SESSION['success'])) {
+                            echo "<div class='alert alert-success' style='color: green;'>{$_SESSION['success']}</div>";
+                            unset($_SESSION['success']); // Clear the message
+                        } elseif (isset($_SESSION['error'])) {
+                            echo "<div class='alert alert-danger' style='color: red;'>{$_SESSION['error']}</div>";
+                            unset($_SESSION['error']); // Clear the message
+                        }
+                        ?>
                     </div>
-                </section>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
+
+        <script>
+            function validateForm() {
+
+                var category = document.forms["updateCategory"]["category"].value;
+                var isValid = true;
+
+                // Reset previous error messages
+                document.getElementById("categoryError").innerHTML = "";
+
+                if (category === "") {
+                    document.getElementById("categoryError").innerHTML = "Category name is required.";
+                    isValid = false;
+                } else if (!/^[a-zA-Z]+$/.test(category)) {
+                    document.getElementById("categoryError").innerHTML = "Category name must contain only alphabets.";
+                    isValid = false;
+                }
+                return isValid;
+            }
+        </script>
+
+        <!-- Include Bootstrap JS (optional) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
 </html>

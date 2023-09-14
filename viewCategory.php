@@ -1,6 +1,7 @@
 <?php
 include 'dbcon.php';
 session_start();
+
 if (isset($_REQUEST['update'])) {
     if ($_SESSION['category_name']) {
         header("Location: updateCategory.php");
@@ -8,37 +9,61 @@ if (isset($_REQUEST['update'])) {
         header("Location: viewCategory.php");
     }
 }
+
 if (isset($_REQUEST['delete'])) {
-
-    $query = "SELECT * FROM tblcategory";
-    $query_run = mysqli_query($con, $query);
-
-    if (mysqli_num_rows($query_run) > 0) {
-        foreach ($query_run as $category) {
-
-            $categoryid = $category['id'];
-        }
-    }
+    if (isset($_POST['categoryid'])) {
+        $categoryid = $_POST['categoryid'];
         $query_delete = "DELETE FROM tblcategory WHERE id = '$categoryid'";
         $query_run_delete = mysqli_query($con, $query_delete);
 
         if ($query_run_delete) {
             // Deletion was successful, you can set a success message if needed
-            $_SESSION['success']= "Category deleted successfully";
+            $_SESSION['success'] = "Category deleted successfully";
         } else {
             // Deletion failed, you can set an error message if needed
-            $_SESSION['error'] = "Error deleting category" . mysqli_error($con);;
+            $_SESSION['error'] = "Error deleting category: " . mysqli_error($con);
         }
-    
+    }
 }
 
+if (isset($_REQUEST['deActive'])) {
+    if (isset($_POST['categoryid'])) {
+        $categoryid = $_POST['categoryid'];
+        $update_query = "UPDATE tblcategory SET status = 0 WHERE id = ?";
+        $stmt = mysqli_prepare($con, $update_query);
+        mysqli_stmt_bind_param($stmt, "i", $categoryid);
+        $query_run = mysqli_stmt_execute($stmt);
+        if ($query_run) {
+            // Update was successful
+            $_SESSION['success'] = "Category deactivated successfully";
+        } else {
+            // Update failed
+            $_SESSION['error'] = "Error deactivating category: " . mysqli_error($con);
+        }
+        mysqli_stmt_close($stmt);
+    }
+}
 
+if (isset($_REQUEST['active'])) {
+    if (isset($_POST['categoryid'])) {
+        $categoryid = $_POST['categoryid'];
+        $update_query = "UPDATE tblcategory SET status = 1 WHERE id = ?";
+        $stmt = mysqli_prepare($con, $update_query);
+        mysqli_stmt_bind_param($stmt, "i", $categoryid);
+        $query_run = mysqli_stmt_execute($stmt);
+        if ($query_run) {
+            // Update was successful
+            $_SESSION['success'] = "Category activated successfully";
+            
+        } else {
+            // Update failed
+            $_SESSION['error'] = "Error activating category: " . mysqli_error($con);
+        }
+        mysqli_stmt_close($stmt);
+    }
+}
 ?>
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to edit this template
--->
 <html>
     <head>
         <meta charset="UTF-8">
@@ -47,17 +72,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <title>View Category</title>
         <style>
-            .btn1{
+            .btn1 {
                 float: right
             }
 
             .content-wrapper {
                 margin-top: 5%;
             }
-            .form-group{
+
+            .form-group {
                 background-image: url('IMG/bg.jpg'); /* Replace with the actual path to your image */
             }
 
+            .deactivated {
+                background-color: #f2f2f2; /* Light gray background */
+            }
+
+            /* Style for disabled buttons */
+            .disabled-button {
+                pointer-events: none; /* Disable button interactions */
+                opacity: 0.6; /* Reduce opacity for disabled look */
+            }
         </style>
     </head>
     <body>
@@ -73,9 +108,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         ?>
 
         <form method="post" action="" name="viewCategory">
-            <div class="content-wrapper ">
-                <section class="content ">
-                    <div class="container ">
+            <div class="content-wrapper">
+                <section class="content">
+                    <div class="container">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
@@ -83,7 +118,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                                         <h1>Categories </h1>
                                     </div>
                                     <div class="card-body">
-                                        <table class="table table-bordered text-center" style="width:90%; margin: auto" >
+                                        <table class="table table-bordered text-center" style="width:90%; margin: auto">
                                             <thead>
                                                 <tr>
                                                     <th>Id</th>
@@ -102,17 +137,35 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                                                     foreach ($query_run as $category) {
                                                         $_SESSION['category_name'] = $category['name'];
                                                         $categoryid = $category['id'];
-                                                        if($category['status']==1)
-                                                        {
-                                                            echo "<tr>";
-                                                            echo "<td>{$category['id']}</td>";
-                                                            echo "<td>{$category['name']}</td>";
-                                                            echo "<td><button class='btn btn-success' type='submit' name='update'>Update</a></button></td>";
-                                                            echo "<td><button class='btn btn-danger' type='submit' name='delete'>Delete</a></button></td>";
-                                                            echo "<td><button class='btn btn-success' type='submit' name='deActive'>De-Active</button></td>";
-                                                            echo "</tr>";
+                                                        $_SESSION['id']=$categoryid;
+                                                        $status = $category['status'];
+                                                        echo "<tr";
+                                                        if ($status == 0) {
+                                                            echo " class='deactivated-row'";
                                                         }
-                                                        
+                                                        echo ">";
+                                                        echo "<td>{$category['id']}</td>";
+                                                        echo "<td>{$category['name']}</td>";
+                                                        echo "<td><button class='btn btn-success";
+                                                        if ($status == 0) {
+                                                            echo " disabled disabled-button";
+                                                        }
+                                                        echo "' type='submit' name='update'>Update</button></td>";
+                                                        echo "<td><button class='btn btn-danger";
+                                                        if ($status == 0) {
+                                                            echo " disabled disabled-button";
+                                                        }
+                                                        echo "' type='submit' name='delete'>Delete</button></td>";
+                                                        echo "<td>";
+                                                        if ($status == 1) {
+                                                            echo "<input type='hidden' name='categoryid' value='$categoryid'>";
+                                                            echo "<button class='btn btn-success' type='submit' name='deActive'>Deactive</button>";
+                                                        } else {
+                                                            echo "<input type='hidden' name='categoryid' value='$categoryid'>";
+                                                            echo "<button class='btn btn-primary' type='submit' name='active'>Active</button>";
+                                                        }
+                                                        echo "</td>";
+                                                        echo "</tr>";
                                                     }
                                                 } else {
                                                     echo "<tr>";
@@ -121,9 +174,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                                                     echo "</tr>";
                                                 }
                                                 ?>
-
-
-                                            </tbody>   
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
