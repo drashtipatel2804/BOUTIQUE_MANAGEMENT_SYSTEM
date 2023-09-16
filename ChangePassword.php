@@ -1,13 +1,6 @@
 <?php
 session_start();
-
-// Database connection
-$con = mysqli_connect("localhost", "root", "", "db_boutique");
-
-if (!$con) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
+require_once 'dbcon.php';
 if (isset($_POST['submit'])) {
     $currentPassword = $_POST['currentPassword'];
     $newPassword = $_POST['newPassword'];
@@ -193,5 +186,7 @@ if (isset($_POST['submit'])) {
             }
 
         </script>
-    </body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="js/common.js"></script>
+         </body>
 </html>

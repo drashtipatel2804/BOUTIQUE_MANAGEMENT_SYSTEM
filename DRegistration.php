@@ -1,29 +1,37 @@
 
 <?php
+
 session_start();
 
-$con = mysqli_connect("localhost", "root", "", "db_boutique");
-
-if (!$con) {
-    die("Connection failed: " . mysqli_connect_error());
+// check  a role also as admin only add delivery boy
+if (!isset($_SESSION['email'])) {
+    header("Location: index.php");
 }
 
+require_once 'dbcon.php';
+
 if (isset($_REQUEST['submit'])) {
+    if (isset($_SESSION['email'])) {
+        $_SESSION['temp_mail'] = $_SESSION['email']; 
+    }
+
     $email = $_POST['email'];
 
     $emailQuery = "SELECT email FROM tbluser WHERE email = '$email'";
     $emailResult = mysqli_query($con, $emailQuery);
 
     if (mysqli_num_rows($emailResult) > 0) {
-
         $_SESSION['error_message'] = "Email already exists. Please use a different email.";
+        
     } else {
 
         $_SESSION['email'] = $email;
+        //echo $_SESSION['demail'];
         header("Location: code_delivery.php");
         exit();
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +77,7 @@ if (isset($_REQUEST['submit'])) {
                     </div>
                     <p class="error" id="emailError"></p>
 
-<?php if (isset($_SESSION['error_message'])): ?>
+                    <?php if (isset($_SESSION['error_message'])): ?>
                         <p class="error"><?php echo $_SESSION['error_message']; ?></p>
                         <?php
                         unset($_SESSION['error_message']);
@@ -82,7 +90,7 @@ if (isset($_REQUEST['submit'])) {
                     </div>
                     <p class="error" id="checkboxError"></p>
 
-                   
+
                     <div class="button_group">
 
                         <button class="login_button" type="submit" name="submit" onclick="return validateForm();">Verify</button>
@@ -137,6 +145,8 @@ if (isset($_REQUEST['submit'])) {
                             }
 
         </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="js/common.js"></script>
     </body>
 </html>
 

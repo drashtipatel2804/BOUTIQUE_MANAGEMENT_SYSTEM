@@ -2,55 +2,61 @@
 require_once 'dbcon.php';
 require_once 'index.php';
 session_start();
-
-if (isset($_SESSION['category_name'])) {
-    $name = $_SESSION['category_name'];
+if (isset($_SESSION['size_name'])) {
+    $name = $_SESSION['size_name'];
     $id = $_SESSION['id'];
 } else {
-    echo '<script>window.location.href = "viewCategory.php";</script>';
+    echo '<script>window.location.href = "viewSize.php";</script>';
     exit();
 }
 
 if (isset($_POST['submit'])) {
-    $newName = mysqli_real_escape_string($con, $_POST['category']);
+    $newName = mysqli_real_escape_string($con, $_POST['size']);
     
-    $sql = "SELECT * FROM tblcategory WHERE id != '$id'";
+    $sql = "SELECT * FROM tblsize WHERE id != '$id'";
     $result = mysqli_query($con, $sql);
 
+    // Define the threshold value
+    $threshold = 0; // You can adjust this value as needed
+
+    function isSimilar($name, $name1, $threshold) {
+        $distance = levenshtein($name, $name1);
+
+        // Compare the distance with the threshold
+        return $distance <= $threshold;
+    }
+
     if ($result) {
-        $isSimilar = false;
+        $isSimilar = false; 
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $name1 = strtolower($row["name"]);
-            $newNameLower = strtolower($newName);
-
-            similar_text($newNameLower, $name1, $similarity);
-
-            if ($similarity >= 50) {
+            $name1 = ($row["name"]);
+            if (isSimilar($name, $name1, $threshold)) {
                 $isSimilar = true;
-                break;
+                break; // Exit the loop as soon as a similar name is found
             }
         }
 
         if ($isSimilar) {
-            $_SESSION['error'] = "Category name is too similar to an existing category.";
+            $_SESSION['error'] = "Size name is too similar to an existing size.";
         } else {
-            $query = "UPDATE tblcategory SET name = '$newName' WHERE id = '$id'";
+            $query = "UPDATE tblsize SET name = '$newName' WHERE id = '$id'";
             $query_run = mysqli_query($con, $query);
 
             if ($query_run) {
-                $_SESSION['success'] = "Category updated successfully";
+                $_SESSION['success'] = "Size updated successfully";
                 // Clear session data
-                unset($_SESSION['category_name']);
+                unset($_SESSION['size_name']);
                 unset($_SESSION['id']);
-                echo '<script>window.location.href = "viewCategory.php";</script>';
+                echo '<script>window.location.href = "viewSize.php";</script>';
                 exit();
             } else {
-                $_SESSION['error'] = "Error updating category: " . mysqli_error($con);
+                $_SESSION['error'] = "Error updating size: " . mysqli_error($con);
             }
         }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -58,11 +64,11 @@ if (isset($_POST['submit'])) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Update Category</title>
+        <title>Update Size</title>
         <!-- Include Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
-            body {
+              body {
                 background-color: #f8f9fa;
                 overflow: hidden; /* Prevent scrolling */
             }
@@ -115,17 +121,17 @@ if (isset($_POST['submit'])) {
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     
-                    <form method="post" action="" name="updateCategory" onsubmit="return validateForm()">
+                    <form method="post" action="" name="updateSize" onsubmit="return validateForm()">
                         <div class="form-group">
-                            <h2 style="text-align: center">Update Category</h2>
+                            <h2 style="text-align: center">Update Size</h2>
                             <div>
-                                <label for="name" style="margin-left: 10px">Category Name:</label>
-                                <input type="text" name="category" class="form-control" id="name" style="margin-left: 10px" value="<?php echo $name; ?>">
-                                <span id="categoryError" class="error"></span>
+                                <label for="name" style="margin-left: 10px">Size Name:</label>
+                                <input type="text" name="size" class="form-control" id="name" style="margin-left: 10px" value="<?php echo $name; ?>">
+                                <span id="sizeError" class="error"></span>
                             </div>
                             <div class="btn_pos">
                                 <button type="submit" name="submit" class="btn btn-primary">Update</button>
-                                <button type="button" class="btn btn-danger" onclick="location.href='viewCategory.php'">Cancel</button>
+                                <button type="button" class="btn btn-danger" onclick="location.href='viewSize.php'">Cancel</button>
                             </div>
                             <div id="messageContainer">
                         <?php
@@ -146,17 +152,17 @@ if (isset($_POST['submit'])) {
 
         <script>
             function validateForm() {
-                var category = document.forms["updateCategory"]["category"].value;
+                var size = document.forms["updateSize"]["size"].value;
                 var isValid = true;
 
                 // Reset previous error messages
-                document.getElementById("categoryError").innerHTML = "";
+                document.getElementById("sizeError").innerHTML = "";
 
-                if (category === "") {
-                    document.getElementById("categoryError").innerHTML = "Category name is required.";
+                if (size === "") {
+                    document.getElementById("sizeError").innerHTML = "Size name is required.";
                     isValid = false;
-                } else if (!/^[a-zA-Z]+$/.test(category)) {
-                    document.getElementById("categoryError").innerHTML = "Category name must contain only alphabets.";
+                } else if (!/^[a-zA-Z]+$/.test(size)) {
+                    document.getElementById("sizeError").innerHTML = "Size name must contain only alphabets.";
                     isValid = false;
                 }
                 return isValid;

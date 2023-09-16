@@ -1,66 +1,66 @@
 <?php
 include 'dbcon.php';
 require_once 'index.php';
-session_start();
+
 
 if (isset($_REQUEST['update'])) {
-    if (isset($_REQUEST['category_name'])) {
-        $_SESSION['category_name'] = $_POST['category_name'];
-        $_SESSION['id'] = $_POST['categoryid'];
-        //header("Location: updateCategory.php");
-        echo '<script>window.location.href = "updateCategory.php";</script>';
+    if (isset($_REQUEST['size_name'])) {
+        $_SESSION['size_name'] = $_POST['size_name'];
+        $_SESSION['id'] = $_POST['sizeid'];
+        //header("Location: updateSize.php");
+        echo '<script>window.location.href = "updateSize.php";</script>';
     } else {
-        echo '<script>window.location.href = "viewCategory.php";</script>';
+        echo '<script>window.location.href = "viewSize.php";</script>';
     }
 }
 
 if (isset($_REQUEST['delete'])) {
-    if (isset($_POST['categoryid'])) {
-        $categoryid = $_POST['categoryid'];
-        $query_delete = "DELETE FROM tblcategory WHERE id = '$categoryid'";
+    if (isset($_POST['sizeid'])) {
+        $sizeid = $_POST['sizeid'];
+        $query_delete = "DELETE FROM tblsize WHERE id = '$sizeid'";
         $query_run_delete = mysqli_query($con, $query_delete);
 
         if ($query_run_delete) {
             // Deletion was successful, you can set a success message if needed
-            $_SESSION['success'] = "Category deleted successfully";
+            $_SESSION['success'] = "Size deleted successfully";
         } else {
             // Deletion failed, you can set an error message if needed
-            $_SESSION['error'] = "Error deleting category: " . mysqli_error($con);
+            $_SESSION['error'] = "Error deleting size: " . mysqli_error($con);
         }
     }
 }
 
 if (isset($_REQUEST['deActive'])) {
-    if (isset($_POST['categoryid'])) {
-        $categoryid = $_POST['categoryid'];
-        $update_query = "UPDATE tblcategory SET status = 0 WHERE id = ?";
+    if (isset($_POST['sizeid'])) {
+        $sizeid = $_POST['sizeid'];
+        $update_query = "UPDATE tblsize SET status = 0 WHERE id = ?";
         $stmt = mysqli_prepare($con, $update_query);
-        mysqli_stmt_bind_param($stmt, "i", $categoryid);
+        mysqli_stmt_bind_param($stmt, "i", $sizeid);
         $query_run = mysqli_stmt_execute($stmt);
         if ($query_run) {
             // Update was successful
-            $_SESSION['success'] = "Category deactivated successfully";
+            $_SESSION['success'] = "Size deactivated successfully";
         } else {
             // Update failed
-            $_SESSION['error'] = "Error deactivating category: " . mysqli_error($con);
+            $_SESSION['error'] = "Error deactivating size: " . mysqli_error($con);
         }
         mysqli_stmt_close($stmt);
     }
 }
 
 if (isset($_REQUEST['active'])) {
-    if (isset($_POST['categoryid'])) {
-        $categoryid = $_POST['categoryid'];
-        $update_query = "UPDATE tblcategory SET status = 1 WHERE id = ?";
+    if (isset($_POST['sizeid'])) {
+        $sizeid = $_POST['sizeid'];
+        $update_query = "UPDATE tblsize SET status = 1 WHERE id = ?";
         $stmt = mysqli_prepare($con, $update_query);
-        mysqli_stmt_bind_param($stmt, "i", $categoryid);
+        mysqli_stmt_bind_param($stmt, "i", $sizeid);
         $query_run = mysqli_stmt_execute($stmt);
         if ($query_run) {
             // Update was successful
-            $_SESSION['success'] = "Category activated successfully";
+            $_SESSION['success'] = "Size activated successfully";
         } else {
             // Update failed
-            $_SESSION['error'] = "Error activating category: " . mysqli_error($con);
+            $_SESSION['error'] = "Error activating size: " . mysqli_error($con);
         }
         mysqli_stmt_close($stmt);
     }
@@ -73,7 +73,7 @@ if (isset($_REQUEST['active'])) {
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <title>View Category</title>
+        <title>View Size</title>
         <style>
             .btn1 {
                 float: right
@@ -120,7 +120,7 @@ if (isset($_REQUEST['active'])) {
 //        }
         ?>
 
-        <form method="post" action="" name="viewCategory">
+        <form method="post" action="" name="viewSize">
             <div class="content-wrapper">
                 <section class="content">
                     <div class="container">
@@ -128,11 +128,11 @@ if (isset($_REQUEST['active'])) {
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header mt-4">
-                                        <h1>Categories </h1>
+                                        <h1>Size </h1>
                                     </div>
                                     <div class="card-body">
                                         <table class="table table-bordered text-center" style="width:90%; margin: auto">
-                                            <button class="btn btn-primary"><a href="category.php" style="color:white">Add</a></button>
+                                            <button class="btn btn-primary"><a href="size.php" style="color:white">Add</a></button>
 
                                             <thead>
                                                 <tr>
@@ -145,24 +145,24 @@ if (isset($_REQUEST['active'])) {
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $query = "SELECT * FROM tblcategory";
+                                                $query = "SELECT * FROM tblsize";
                                                 $query_run = mysqli_query($con, $query);
 
                                                 if (mysqli_num_rows($query_run) > 0) {
-                                                    foreach ($query_run as $category) {
-                                                        $category_name = $category['name'];
-                                                        $categoryid = $category['id'];
-                                                        $status = $category['status'];
-                                                        echo "<form method='POST' action='' name='categoryForm'>";
+                                                    foreach ($query_run as $size) {
+                                                        $size_name = $size['name'];
+                                                        $sizeid = $size['id'];
+                                                        $status = $size['status'];
+                                                        echo "<form method='POST' action='' name='sizeForm'>";
                                                         echo "<tr";
                                                         if ($status == 0) {
                                                             echo " class='deactivated-row'";
                                                         }
                                                         echo ">";
-                                                        echo "<td>{$categoryid}</td>";
-                                                        echo "<td>{$category_name}</td>";
-                                                        echo "<input type='hidden' name='category_name' value='$category_name'>";
-                                                        echo "<input type='hidden' name='categoryid' value='$categoryid'>";
+                                                        echo "<td>{$sizeid}</td>";
+                                                        echo "<td>{$size_name}</td>";
+                                                        echo "<input type='hidden' name='size_name' value='$size_name'>";
+                                                        echo "<input type='hidden' name='sizeid' value='$sizeid'>";
                                                         echo "<td><button class='btn btn-success";
                                                         if ($status == 0) {
                                                             echo " disabled disabled-button";

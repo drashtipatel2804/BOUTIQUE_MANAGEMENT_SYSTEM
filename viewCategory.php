@@ -1,12 +1,16 @@
 <?php
 include 'dbcon.php';
+require_once 'index.php';
 session_start();
 
 if (isset($_REQUEST['update'])) {
-    if ($_SESSION['category_name']) {
-        header("Location: updateCategory.php");
+    if (isset($_REQUEST['category_name'])) {
+        $_SESSION['category_name'] = $_POST['category_name'];
+        $_SESSION['id'] = $_POST['categoryid'];
+        //header("Location: updateCategory.php");
+        echo '<script>window.location.href = "updateCategory.php";</script>';
     } else {
-        header("Location: viewCategory.php");
+        echo '<script>window.location.href = "viewCategory.php";</script>';
     }
 }
 
@@ -54,7 +58,6 @@ if (isset($_REQUEST['active'])) {
         if ($query_run) {
             // Update was successful
             $_SESSION['success'] = "Category activated successfully";
-            
         } else {
             // Update failed
             $_SESSION['error'] = "Error activating category: " . mysqli_error($con);
@@ -77,7 +80,8 @@ if (isset($_REQUEST['active'])) {
             }
 
             .content-wrapper {
-                margin-top: 5%;
+                margin-top: 6%;
+                margin-left: 300px;
             }
 
             .form-group {
@@ -93,18 +97,27 @@ if (isset($_REQUEST['active'])) {
                 pointer-events: none; /* Disable button interactions */
                 opacity: 0.6; /* Reduce opacity for disabled look */
             }
+            .btn-primary{
+                margin-left: 3%;
+                margin-bottom: 12px;
+            }
+            .table-bordered{
+                margin-left: 50px;
+                margin-top: 80px;
+                width: 120px;
+            }
         </style>
     </head>
     <body>
         <?php
 // Check for success or error messages
-        if (isset($_SESSION['success'])) {
-            echo "<div class='alert alert-success'>{$_SESSION['success']}</div>";
-            unset($_SESSION['success']); // Clear the message
-        } elseif (isset($_SESSION['error'])) {
-            echo "<div class='alert alert-danger'>{$_SESSION['error']}</div>";
-            unset($_SESSION['error']); // Clear the message
-        }
+//        if (isset($_SESSION['success'])) {
+//            echo "<div class='alert alert-success'>{$_SESSION['success']}</div>";
+//            unset($_SESSION['success']); // Clear the message
+//        } elseif (isset($_SESSION['error'])) {
+//            echo "<div class='alert alert-danger'>{$_SESSION['error']}</div>";
+//            unset($_SESSION['error']); // Clear the message
+//        }
         ?>
 
         <form method="post" action="" name="viewCategory">
@@ -119,6 +132,8 @@ if (isset($_REQUEST['active'])) {
                                     </div>
                                     <div class="card-body">
                                         <table class="table table-bordered text-center" style="width:90%; margin: auto">
+                                            <button class="btn btn-primary"><a href="category.php" style="color:white">Add</a></button>
+
                                             <thead>
                                                 <tr>
                                                     <th>Id</th>
@@ -135,17 +150,19 @@ if (isset($_REQUEST['active'])) {
 
                                                 if (mysqli_num_rows($query_run) > 0) {
                                                     foreach ($query_run as $category) {
-                                                        $_SESSION['category_name'] = $category['name'];
+                                                        $category_name = $category['name'];
                                                         $categoryid = $category['id'];
-                                                        $_SESSION['id']=$categoryid;
                                                         $status = $category['status'];
+                                                        echo "<form method='POST' action='' name='categoryForm'>";
                                                         echo "<tr";
                                                         if ($status == 0) {
                                                             echo " class='deactivated-row'";
                                                         }
                                                         echo ">";
-                                                        echo "<td>{$category['id']}</td>";
-                                                        echo "<td>{$category['name']}</td>";
+                                                        echo "<td>{$categoryid}</td>";
+                                                        echo "<td>{$category_name}</td>";
+                                                        echo "<input type='hidden' name='category_name' value='$category_name'>";
+                                                        echo "<input type='hidden' name='categoryid' value='$categoryid'>";
                                                         echo "<td><button class='btn btn-success";
                                                         if ($status == 0) {
                                                             echo " disabled disabled-button";
@@ -158,14 +175,13 @@ if (isset($_REQUEST['active'])) {
                                                         echo "' type='submit' name='delete'>Delete</button></td>";
                                                         echo "<td>";
                                                         if ($status == 1) {
-                                                            echo "<input type='hidden' name='categoryid' value='$categoryid'>";
-                                                            echo "<button class='btn btn-success' type='submit' name='deActive'>Deactive</button>";
+                                                            echo "<button class='btn btn-success' type='submit' name='deActive'>Deactivate</button>";
                                                         } else {
-                                                            echo "<input type='hidden' name='categoryid' value='$categoryid'>";
-                                                            echo "<button class='btn btn-primary' type='submit' name='active'>Active</button>";
+                                                            echo "<button class='btn btn-primary' type='submit' name='active'>Activate</button>";
                                                         }
                                                         echo "</td>";
                                                         echo "</tr>";
+                                                        echo "</form>";
                                                     }
                                                 } else {
                                                     echo "<tr>";

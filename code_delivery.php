@@ -1,12 +1,11 @@
 
 <?php
+
 session_start();
-if(!isset($_SESSION['email']))
-{
+if (!isset($_SESSION['email'])) {
     header("Location: DRegistration.php");
-}
- else 
-{
+    exit();
+} else {
     $email = $_SESSION['email'];
 
     $otp = random_int(100000, 999999);
@@ -23,8 +22,5 @@ if(!isset($_SESSION['email']))
         header("Location: otp_delivery.php");
     }
 }
-
-session_unset();
-session_abort();
 ?>
 

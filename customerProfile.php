@@ -186,7 +186,7 @@ if (!isset($_SESSION['email'])) {
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <div class="title2"><a href="homeNew.php">Home</a></div>></li>
+                            <div class="title2"><a href="customer_dash.php">Home</a></div>></li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -564,6 +564,8 @@ if (!isset($_SESSION['email'])) {
                                     }
                                 </script>
                                 <!-- End Profile Edit Form -->
+                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                            <script src="js/common.js"></script>
                             </div>
                         </div>
                     </div><!-- End Bordered Tabs -->

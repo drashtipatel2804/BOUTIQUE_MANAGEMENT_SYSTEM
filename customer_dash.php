@@ -8,21 +8,20 @@ if (!isset($_SESSION['email'])) {
 } else {
     $email = $_SESSION['email'];
     $sql1 = "SELECT fname, lname FROM tbluser WHERE email='$email'";
-$result1 = mysqli_query($con, $sql1);
-$name = "";
+    $result1 = mysqli_query($con, $sql1);
+    $name = "";
 
-if (mysqli_num_rows($result1) > 0) {
-    $names = array();
-    while ($row = mysqli_fetch_assoc($result1)) {
-        $fname = $row["fname"];
-        $lname = $row["lname"];
-       
-        $name = $fname . " " . $lname;
-        $names[] = $name;
+    if (mysqli_num_rows($result1) > 0) {
+        $names = array();
+        while ($row = mysqli_fetch_assoc($result1)) {
+            $fname = $row["fname"];
+            $lname = $row["lname"];
+
+            $name = $fname . " " . $lname;
+            $names[] = $name;
+        }
     }
 }
-}
-
 ?>
 <!DOCTYPE html>
 <!--
@@ -49,7 +48,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <!-- Slick Carousel CSS -->
-        
+
 
         <style>
             .slider-container {
@@ -162,7 +161,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="index.html" class="nav-item nav-link active">Home</a>
+                                <a href="customer_dash.php" class="nav-item nav-link active">Home</a>
                                 <a href="shop.html" class="nav-item nav-link">Men</a>
                                 <a href="detail.html" class="nav-item nav-link">Women</a>
                                 <div class="nav-item dropdown">
@@ -173,25 +172,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                                     </div>
                                 </div>
                                 <a href="" class="nav-item nav-link">Contact Us</a>
-                                <a href="" class="nav-item nav-link">About Us</a>
+                                <a href="location.php" class="nav-item nav-link">Location</a>
                             </div>
                             <div class="nav-item dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><?php
-                                if (count($names) > 0) {
-                                    foreach ($names as $name) {
-                                        echo $name . "<br>";
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><?php
+                                    if (count($names) > 0) {
+                                        foreach ($names as $name) {
+                                            echo $name . "<br>";
+                                        }
                                     }
-                                }
-                                ?></a>
-                                    <div class="dropdown-menu rounded-0 m-0">
-                                        <a href="customerProfile.php" class="dropdown-item">
-                                            My Profile</a>
-                                        <a href="ChangePassword.php" class="dropdown-item">Change Password</a>
-                                        <a href="Forgot.php" class="dropdown-item">Forgot Password</a>
-                                        <a href="signout_c.php" class="dropdown-item">Sign Out</a>
-                                    </div>
+                                    ?></a>
+                                <div class="dropdown-menu rounded-0 m-0">
+                                    <a href="customerProfile.php" class="dropdown-item">
+                                        My Profile</a>
+                                    <a href="ChangePassword.php" class="dropdown-item">Change Password</a>
+                                    <a href="Forgot.php" class="dropdown-item">Forgot Password</a>
+                                    <a href="signout_c.php" class="dropdown-item">Sign Out</a>
                                 </div>
-            
+                            </div>
+
                         </div>
                     </nav>
 

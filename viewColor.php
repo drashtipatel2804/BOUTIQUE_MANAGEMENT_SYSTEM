@@ -4,63 +4,63 @@ require_once 'index.php';
 session_start();
 
 if (isset($_REQUEST['update'])) {
-    if (isset($_REQUEST['category_name'])) {
-        $_SESSION['category_name'] = $_POST['category_name'];
-        $_SESSION['id'] = $_POST['categoryid'];
-        //header("Location: updateCategory.php");
-        echo '<script>window.location.href = "updateCategory.php";</script>';
+    if (isset($_REQUEST['color_name'])) {
+        $_SESSION['color_name'] = $_POST['color_name'];
+        $_SESSION['id'] = $_POST['colorid'];
+        //header("Location: updateColor.php");
+        echo '<script>window.location.href = "updateColor.php";</script>';
     } else {
-        echo '<script>window.location.href = "viewCategory.php";</script>';
+        echo '<script>window.location.href = "viewColor.php";</script>';
     }
 }
 
 if (isset($_REQUEST['delete'])) {
-    if (isset($_POST['categoryid'])) {
-        $categoryid = $_POST['categoryid'];
-        $query_delete = "DELETE FROM tblcategory WHERE id = '$categoryid'";
+    if (isset($_POST['colorid'])) {
+        $colorid = $_POST['colorid'];
+        $query_delete = "DELETE FROM tblcolor WHERE id = '$colorid'";
         $query_run_delete = mysqli_query($con, $query_delete);
 
         if ($query_run_delete) {
             // Deletion was successful, you can set a success message if needed
-            $_SESSION['success'] = "Category deleted successfully";
+            $_SESSION['success'] = "Color deleted successfully";
         } else {
             // Deletion failed, you can set an error message if needed
-            $_SESSION['error'] = "Error deleting category: " . mysqli_error($con);
+            $_SESSION['error'] = "Error deleting color: " . mysqli_error($con);
         }
     }
 }
 
 if (isset($_REQUEST['deActive'])) {
-    if (isset($_POST['categoryid'])) {
-        $categoryid = $_POST['categoryid'];
-        $update_query = "UPDATE tblcategory SET status = 0 WHERE id = ?";
+    if (isset($_POST['colorid'])) {
+        $colorid = $_POST['colorid'];
+        $update_query = "UPDATE tblcolor SET status = 0 WHERE id = ?";
         $stmt = mysqli_prepare($con, $update_query);
-        mysqli_stmt_bind_param($stmt, "i", $categoryid);
+        mysqli_stmt_bind_param($stmt, "i", $colorid);
         $query_run = mysqli_stmt_execute($stmt);
         if ($query_run) {
             // Update was successful
-            $_SESSION['success'] = "Category deactivated successfully";
+            $_SESSION['success'] = "Color deactivated successfully";
         } else {
             // Update failed
-            $_SESSION['error'] = "Error deactivating category: " . mysqli_error($con);
+            $_SESSION['error'] = "Error deactivating color: " . mysqli_error($con);
         }
         mysqli_stmt_close($stmt);
     }
 }
 
 if (isset($_REQUEST['active'])) {
-    if (isset($_POST['categoryid'])) {
-        $categoryid = $_POST['categoryid'];
-        $update_query = "UPDATE tblcategory SET status = 1 WHERE id = ?";
+    if (isset($_POST['colorid'])) {
+        $colorid = $_POST['colorid'];
+        $update_query = "UPDATE tblcolor SET status = 1 WHERE id = ?";
         $stmt = mysqli_prepare($con, $update_query);
-        mysqli_stmt_bind_param($stmt, "i", $categoryid);
+        mysqli_stmt_bind_param($stmt, "i", $colorid);
         $query_run = mysqli_stmt_execute($stmt);
         if ($query_run) {
             // Update was successful
-            $_SESSION['success'] = "Category activated successfully";
+            $_SESSION['success'] = "Color activated successfully";
         } else {
             // Update failed
-            $_SESSION['error'] = "Error activating category: " . mysqli_error($con);
+            $_SESSION['error'] = "Error activating color: " . mysqli_error($con);
         }
         mysqli_stmt_close($stmt);
     }
@@ -73,7 +73,7 @@ if (isset($_REQUEST['active'])) {
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <title>View Category</title>
+        <title>View Color</title>
         <style>
             .btn1 {
                 float: right
@@ -120,7 +120,7 @@ if (isset($_REQUEST['active'])) {
 //        }
         ?>
 
-        <form method="post" action="" name="viewCategory">
+        <form method="post" action="" name="viewColor">
             <div class="content-wrapper">
                 <section class="content">
                     <div class="container">
@@ -128,11 +128,11 @@ if (isset($_REQUEST['active'])) {
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header mt-4">
-                                        <h1>Categories </h1>
+                                        <h1>Color </h1>
                                     </div>
                                     <div class="card-body">
                                         <table class="table table-bordered text-center" style="width:90%; margin: auto">
-                                            <button class="btn btn-primary"><a href="category.php" style="color:white">Add</a></button>
+                                            <button class="btn btn-primary"><a href="color.php" style="color:white">Add</a></button>
 
                                             <thead>
                                                 <tr>
@@ -145,24 +145,24 @@ if (isset($_REQUEST['active'])) {
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $query = "SELECT * FROM tblcategory";
+                                                $query = "SELECT * FROM tblcolor";
                                                 $query_run = mysqli_query($con, $query);
 
                                                 if (mysqli_num_rows($query_run) > 0) {
-                                                    foreach ($query_run as $category) {
-                                                        $category_name = $category['name'];
-                                                        $categoryid = $category['id'];
-                                                        $status = $category['status'];
-                                                        echo "<form method='POST' action='' name='categoryForm'>";
+                                                    foreach ($query_run as $color) {
+                                                        $color_name = $color['name'];
+                                                        $colorid = $color['id'];
+                                                        $status = $color['status'];
+                                                        echo "<form method='POST' action='' name='colorForm'>";
                                                         echo "<tr";
                                                         if ($status == 0) {
                                                             echo " class='deactivated-row'";
                                                         }
                                                         echo ">";
-                                                        echo "<td>{$categoryid}</td>";
-                                                        echo "<td>{$category_name}</td>";
-                                                        echo "<input type='hidden' name='category_name' value='$category_name'>";
-                                                        echo "<input type='hidden' name='categoryid' value='$categoryid'>";
+                                                        echo "<td>{$colorid}</td>";
+                                                        echo "<td>{$color_name}</td>";
+                                                        echo "<input type='hidden' name='color_name' value='$color_name'>";
+                                                        echo "<input type='hidden' name='colorid' value='$colorid'>";
                                                         echo "<td><button class='btn btn-success";
                                                         if ($status == 0) {
                                                             echo " disabled disabled-button";

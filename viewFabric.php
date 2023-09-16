@@ -4,63 +4,63 @@ require_once 'index.php';
 session_start();
 
 if (isset($_REQUEST['update'])) {
-    if (isset($_REQUEST['category_name'])) {
-        $_SESSION['category_name'] = $_POST['category_name'];
-        $_SESSION['id'] = $_POST['categoryid'];
-        //header("Location: updateCategory.php");
-        echo '<script>window.location.href = "updateCategory.php";</script>';
+    if (isset($_REQUEST['fabric_name'])) {
+        $_SESSION['fabric_name'] = $_POST['fabric_name'];
+        $_SESSION['id'] = $_POST['fabricid'];
+        //header("Location: updateFabric.php");
+        echo '<script>window.location.href = "updateFabric.php";</script>';
     } else {
-        echo '<script>window.location.href = "viewCategory.php";</script>';
+        echo '<script>window.location.href = "viewFabric.php";</script>';
     }
 }
 
 if (isset($_REQUEST['delete'])) {
-    if (isset($_POST['categoryid'])) {
-        $categoryid = $_POST['categoryid'];
-        $query_delete = "DELETE FROM tblcategory WHERE id = '$categoryid'";
+    if (isset($_POST['fabricid'])) {
+        $fabricid = $_POST['fabricid'];
+        $query_delete = "DELETE FROM tblfabric WHERE id = '$fabricid'";
         $query_run_delete = mysqli_query($con, $query_delete);
 
         if ($query_run_delete) {
             // Deletion was successful, you can set a success message if needed
-            $_SESSION['success'] = "Category deleted successfully";
+            $_SESSION['success'] = "Fabric deleted successfully";
         } else {
             // Deletion failed, you can set an error message if needed
-            $_SESSION['error'] = "Error deleting category: " . mysqli_error($con);
+            $_SESSION['error'] = "Error deleting fabric: " . mysqli_error($con);
         }
     }
 }
 
 if (isset($_REQUEST['deActive'])) {
-    if (isset($_POST['categoryid'])) {
-        $categoryid = $_POST['categoryid'];
-        $update_query = "UPDATE tblcategory SET status = 0 WHERE id = ?";
+    if (isset($_POST['fabricid'])) {
+        $fabricid = $_POST['fabricid'];
+        $update_query = "UPDATE tblfabric SET status = 0 WHERE id = ?";
         $stmt = mysqli_prepare($con, $update_query);
-        mysqli_stmt_bind_param($stmt, "i", $categoryid);
+        mysqli_stmt_bind_param($stmt, "i", $fabricid);
         $query_run = mysqli_stmt_execute($stmt);
         if ($query_run) {
             // Update was successful
-            $_SESSION['success'] = "Category deactivated successfully";
+            $_SESSION['success'] = "Fabric deactivated successfully";
         } else {
             // Update failed
-            $_SESSION['error'] = "Error deactivating category: " . mysqli_error($con);
+            $_SESSION['error'] = "Error deactivating fabric: " . mysqli_error($con);
         }
         mysqli_stmt_close($stmt);
     }
 }
 
 if (isset($_REQUEST['active'])) {
-    if (isset($_POST['categoryid'])) {
-        $categoryid = $_POST['categoryid'];
-        $update_query = "UPDATE tblcategory SET status = 1 WHERE id = ?";
+    if (isset($_POST['fabricid'])) {
+        $fabricid = $_POST['fabricid'];
+        $update_query = "UPDATE tblfabric SET status = 1 WHERE id = ?";
         $stmt = mysqli_prepare($con, $update_query);
-        mysqli_stmt_bind_param($stmt, "i", $categoryid);
+        mysqli_stmt_bind_param($stmt, "i", $fabricid);
         $query_run = mysqli_stmt_execute($stmt);
         if ($query_run) {
             // Update was successful
-            $_SESSION['success'] = "Category activated successfully";
+            $_SESSION['success'] = "Fabric activated successfully";
         } else {
             // Update failed
-            $_SESSION['error'] = "Error activating category: " . mysqli_error($con);
+            $_SESSION['error'] = "Error activating fabric: " . mysqli_error($con);
         }
         mysqli_stmt_close($stmt);
     }
@@ -73,7 +73,7 @@ if (isset($_REQUEST['active'])) {
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <title>View Category</title>
+        <title>View Fabric</title>
         <style>
             .btn1 {
                 float: right
@@ -120,7 +120,7 @@ if (isset($_REQUEST['active'])) {
 //        }
         ?>
 
-        <form method="post" action="" name="viewCategory">
+        <form method="post" action="" name="viewFabric">
             <div class="content-wrapper">
                 <section class="content">
                     <div class="container">
@@ -128,11 +128,11 @@ if (isset($_REQUEST['active'])) {
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header mt-4">
-                                        <h1>Categories </h1>
+                                        <h1>Fabric </h1>
                                     </div>
                                     <div class="card-body">
                                         <table class="table table-bordered text-center" style="width:90%; margin: auto">
-                                            <button class="btn btn-primary"><a href="category.php" style="color:white">Add</a></button>
+                                            <button class="btn btn-primary"><a href="fabric.php" style="color:white">Add</a></button>
 
                                             <thead>
                                                 <tr>
@@ -145,24 +145,24 @@ if (isset($_REQUEST['active'])) {
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $query = "SELECT * FROM tblcategory";
+                                                $query = "SELECT * FROM tblfabric";
                                                 $query_run = mysqli_query($con, $query);
 
                                                 if (mysqli_num_rows($query_run) > 0) {
-                                                    foreach ($query_run as $category) {
-                                                        $category_name = $category['name'];
-                                                        $categoryid = $category['id'];
-                                                        $status = $category['status'];
-                                                        echo "<form method='POST' action='' name='categoryForm'>";
+                                                    foreach ($query_run as $fabric) {
+                                                        $fabric_name = $fabric['name'];
+                                                        $fabricid = $fabric['id'];
+                                                        $status = $fabric['status'];
+                                                        echo "<form method='POST' action='' name='fabricForm'>";
                                                         echo "<tr";
                                                         if ($status == 0) {
                                                             echo " class='deactivated-row'";
                                                         }
                                                         echo ">";
-                                                        echo "<td>{$categoryid}</td>";
-                                                        echo "<td>{$category_name}</td>";
-                                                        echo "<input type='hidden' name='category_name' value='$category_name'>";
-                                                        echo "<input type='hidden' name='categoryid' value='$categoryid'>";
+                                                        echo "<td>{$fabricid}</td>";
+                                                        echo "<td>{$fabric_name}</td>";
+                                                        echo "<input type='hidden' name='fabric_name' value='$fabric_name'>";
+                                                        echo "<input type='hidden' name='fabricid' value='$fabricid'>";
                                                         echo "<td><button class='btn btn-success";
                                                         if ($status == 0) {
                                                             echo " disabled disabled-button";

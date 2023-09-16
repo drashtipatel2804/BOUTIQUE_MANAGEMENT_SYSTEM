@@ -3,18 +3,18 @@ require_once 'dbcon.php';
 require_once 'index.php';
 session_start();
 
-if (isset($_SESSION['category_name'])) {
-    $name = $_SESSION['category_name'];
+if (isset($_SESSION['color_name'])) {
+    $name = $_SESSION['color_name'];
     $id = $_SESSION['id'];
 } else {
-    echo '<script>window.location.href = "viewCategory.php";</script>';
+    echo '<script>window.location.href = "viewColor.php";</script>';
     exit();
 }
 
 if (isset($_POST['submit'])) {
-    $newName = mysqli_real_escape_string($con, $_POST['category']);
+    $newName = mysqli_real_escape_string($con, $_POST['color']);
     
-    $sql = "SELECT * FROM tblcategory WHERE id != '$id'";
+    $sql = "SELECT * FROM tblcolor WHERE id != '$id'";
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -33,20 +33,20 @@ if (isset($_POST['submit'])) {
         }
 
         if ($isSimilar) {
-            $_SESSION['error'] = "Category name is too similar to an existing category.";
+            $_SESSION['error'] = "Color name is too similar to an existing color.";
         } else {
-            $query = "UPDATE tblcategory SET name = '$newName' WHERE id = '$id'";
+            $query = "UPDATE tblcolor SET name = '$newName' WHERE id = '$id'";
             $query_run = mysqli_query($con, $query);
 
             if ($query_run) {
-                $_SESSION['success'] = "Category updated successfully";
+                $_SESSION['success'] = "Color updated successfully";
                 // Clear session data
-                unset($_SESSION['category_name']);
+                unset($_SESSION['color_name']);
                 unset($_SESSION['id']);
-                echo '<script>window.location.href = "viewCategory.php";</script>';
+                echo '<script>window.location.href = "viewColor.php";</script>';
                 exit();
             } else {
-                $_SESSION['error'] = "Error updating category: " . mysqli_error($con);
+                $_SESSION['error'] = "Error updating color: " . mysqli_error($con);
             }
         }
     }
@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Update Category</title>
+        <title>Update Color</title>
         <!-- Include Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
@@ -89,7 +89,7 @@ if (isset($_POST['submit'])) {
             .form-group {
                 margin-top: 150px;
                 margin-bottom: 20px;
-                margin-left: 220px;
+                margin-left: 100px;
                 border-radius: 5px;
                 box-shadow: 0 2px 4px rgba(0.3, 0.3, 0.3, 0.3);
                 width: 350px;
@@ -115,17 +115,17 @@ if (isset($_POST['submit'])) {
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     
-                    <form method="post" action="" name="updateCategory" onsubmit="return validateForm()">
+                    <form method="post" action="" name="updateColor" onsubmit="return validateForm()">
                         <div class="form-group">
-                            <h2 style="text-align: center">Update Category</h2>
+                            <h2 style="text-align: center">Update Color</h2>
                             <div>
-                                <label for="name" style="margin-left: 10px">Category Name:</label>
-                                <input type="text" name="category" class="form-control" id="name" style="margin-left: 10px" value="<?php echo $name; ?>">
-                                <span id="categoryError" class="error"></span>
+                                <label for="name" style="margin-left: 10px">Color Name:</label>
+                                <input type="text" name="color" class="form-control" id="name" style="margin-left: 10px" value="<?php echo $name; ?>">
+                                <span id="colorError" class="error"></span>
                             </div>
                             <div class="btn_pos">
                                 <button type="submit" name="submit" class="btn btn-primary">Update</button>
-                                <button type="button" class="btn btn-danger" onclick="location.href='viewCategory.php'">Cancel</button>
+                                <button type="button" class="btn btn-danger" onclick="location.href='viewColor.php'">Cancel</button>
                             </div>
                             <div id="messageContainer">
                         <?php
@@ -146,17 +146,17 @@ if (isset($_POST['submit'])) {
 
         <script>
             function validateForm() {
-                var category = document.forms["updateCategory"]["category"].value;
+                var color = document.forms["updateColor"]["color"].value;
                 var isValid = true;
 
                 // Reset previous error messages
-                document.getElementById("categoryError").innerHTML = "";
+                document.getElementById("colorError").innerHTML = "";
 
-                if (category === "") {
-                    document.getElementById("categoryError").innerHTML = "Category name is required.";
+                if (color === "") {
+                    document.getElementById("colorError").innerHTML = "Color name is required.";
                     isValid = false;
-                } else if (!/^[a-zA-Z]+$/.test(category)) {
-                    document.getElementById("categoryError").innerHTML = "Category name must contain only alphabets.";
+                } else if (!/^[a-zA-Z]+$/.test(color)) {
+                    document.getElementById("colorError").innerHTML = "Color name must contain only alphabets.";
                     isValid = false;
                 }
                 return isValid;

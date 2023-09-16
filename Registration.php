@@ -2,11 +2,7 @@
 <?php
 session_start();
 
-$con = mysqli_connect("localhost", "root", "", "db_boutique");
-
-if (!$con) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+require_once 'dbcon.php';
 
 if (isset($_REQUEST['submit'])) {
     $email = $_POST['email'];
@@ -172,7 +168,10 @@ if (isset($_REQUEST['submit'])) {
                             }
 
 
+
         </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="js/common.js"></script>
     </body>
 </html>
 

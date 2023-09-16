@@ -51,6 +51,8 @@ session_abort();
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
             />
         <link rel="stylesheet" href="CSS/forgotpassword.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
         <style>
             .error {
                 color: red;
@@ -61,7 +63,7 @@ session_abort();
         </style>
     </head>
     <body>
-        <form action="" method="post">
+        <form action="" method="post" id="myform">
         <div class="forgot_password_container">
             <div class="forgot_password_form">
                 <h2 style="color:#ee00ff">Forgot Password</h2>
@@ -93,7 +95,7 @@ session_abort();
                 <div class="button_group">
 
                     <button class="send_button" type="submit" name="submit" onclick="return validateForm();">Send OTP</button>
-
+                    
                 </div>
             </div>
         </div>
@@ -120,6 +122,9 @@ session_abort();
 
                 return true;
             }
+
+           
         </script>
+        <script src='js/common.js'></script>
     </body>
 </html>

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <!--
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -137,7 +136,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="index.html" class="nav-item nav-link active">Home</a>
+                                <a href="homeNew.php" class="nav-item nav-link active">Home</a>
                                 <a href="shop.html" class="nav-item nav-link">Men</a>
                                 <a href="detail.html" class="nav-item nav-link">Women</a>
                                 <div class="nav-item dropdown">
@@ -148,8 +147,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                                     </div>
                                 </div>
                                 <a href="" class="nav-item nav-link">Contact Us</a>
-                                <a href="" class="nav-item nav-link">About Us</a>
-                            </div>
+                                <a href="location.html" class="nav-item nav-link">Location</a>
+                                </div>
                             <div class="navbar-nav ml-auto py-0">
                                 <a href="login.php" class="nav-item nav-link">Login</a>
                                 <a href="Registration.php" class="nav-item nav-link">Register</a>

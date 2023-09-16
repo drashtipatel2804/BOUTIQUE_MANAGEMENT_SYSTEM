@@ -21,10 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
  
     
     if ($userEnteredOTP == $_SESSION['otp']) {
-     
+        
         header("Location: DReg2.php");
         exit(); 
-        $error_message = "OTP does nont  match";
+        
     } else {
         
        $error_message = "OTP does not match";

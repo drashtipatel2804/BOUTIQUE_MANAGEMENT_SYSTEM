@@ -1,11 +1,7 @@
 <?php
 session_start();
 $email = $_SESSION['email'];
-$con = mysqli_connect("localhost", "root", "", "db_boutique");
-
-if (!$con) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+require_once 'dbcon.php';
 
 if (isset($_REQUEST['submit'])) {
     $fname = $_POST['fname'];
