@@ -149,6 +149,10 @@ if (isset($_REQUEST['submit'])) {
         .container {
             width: 1200px;
         }
+        .validation-error {
+        color: red;
+        }
+
     </style>
 </head>
 
@@ -307,8 +311,8 @@ if (isset($_REQUEST['submit'])) {
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-    <script src="js/product_validation.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>>
+    <script src="js/validation.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <script>
         $(document).ready(function() {
