@@ -7,7 +7,7 @@ if (isset($_REQUEST['submit'])) {
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
     $password = $_POST['password'];
-    
+    $password=password_hash($password,PASSWORD_DEFAULT);
     
     $role = 'Customer';
 

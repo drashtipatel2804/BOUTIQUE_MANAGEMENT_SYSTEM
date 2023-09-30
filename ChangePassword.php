@@ -153,7 +153,7 @@ if (isset($_POST['submit'])) {
                     currentPasswordError.innerHTML = "Please enter your current password.";
                     hasError = true;
                 }
-
+                
                 if (newPassword === "") {
                     newPasswordError.innerHTML = "Please enter a new password.";
                     hasError = true;

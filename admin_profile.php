@@ -417,7 +417,7 @@ while ($row = mysqli_fetch_assoc($cityResult)) {
                                 // if ($result) {
                                 //     echo "<script>alert('update')</script>";
                                 // }
-                                echo "<meta http-equiv='refresh' content='0'>";
+                                echo "<meta http-equiv='refresh' content='0'>"; //fpr reaload
                             }
                             ?>
                             <script>

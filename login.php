@@ -21,46 +21,93 @@ if (isset($_SESSION['email'])) {
 
     if ($role == "Customer") {
         header('Location: customer_dash.php');
-    } else if ($role == "Admin") {
+    } else   {
         header('Location: index.php');
-    } else {
-        header('Location: deliveryPerson.php');
     }
+    // } else {
+    //     header('Location: deliveryPerson.php');
+    // }
 
     exit();
 } else {
+    // if (isset($_POST['submit'])) {
+    //     $email = $_POST['email'];
+    //     $password = $_POST['password'];
+    //     $verify=password_verify($password,$row['password']);
+    //     $loginQuery = "SELECT * FROM tbluser WHERE email = '$email' AND password = '$verify'";
+    //     $loginResult = mysqli_query($con, $loginQuery);
+
+    //     if (mysqli_num_rows($loginResult) == 1) {
+    //         $row = mysqli_fetch_assoc($loginResult);
+    //         $_SESSION['email'] = $email;
+
+    //         if (isset($_POST['remember_me'])) {
+    //             setcookie('emailcookie', $email);
+    //             setcookie('passwordcookie', $password);
+    //         }
+
+    //         $role = $row['role'];
+
+    //         if ($role == "Customer") {
+    //             header('Location: customer_dash.php');
+    //         } else {
+    //             header('Location: index.php');
+    //         }
+    //         // } else {
+    //         //     header('Location: deliveryPerson.php');
+    //         // }
+    //         exit();
+    //     } else {
+    //         $_SESSION['error_message'] = "Invalid email address or password.";
+    //         header("Location: login.php");
+    //         exit();
+    //     }
+    // }
     if (isset($_POST['submit'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
-
-        $loginQuery = "SELECT * FROM tbluser WHERE email = '$email' AND password = '$password'";
+    
+        // Validate and sanitize user input 
+        $email = mysqli_real_escape_string($con, $email);
+    
+        $loginQuery = "SELECT * FROM tbluser WHERE email = '$email'";
         $loginResult = mysqli_query($con, $loginQuery);
-
-        if (mysqli_num_rows($loginResult) == 1) {
+    
+        if ($loginResult && mysqli_num_rows($loginResult) == 1) {
             $row = mysqli_fetch_assoc($loginResult);
-            $_SESSION['email'] = $email;
-
-            if (isset($_POST['remember_me'])) {
-                setcookie('emailcookie', $email);
-                setcookie('passwordcookie', $password);
-            }
-
-            $role = $row['role'];
-
-            if ($role == "Customer") {
-                header('Location: customer_dash.php');
-            } else if ($role == "Admin") {
-                header('Location: index.php');
+            $hashedPassword = $row['password'];
+    
+            if (password_verify($password, $hashedPassword)) {
+                // Password is correct
+                $_SESSION['email'] = $email;
+                
+                if (isset($_POST['remember_me'])) 
+                {
+                    setcookie('emailcookie', $email);
+                    setcookie('passwordcookie', $password);
+                }
+    
+                // Retrieve the user's role from the database
+                $role = $row['role'];
+    
+                if ($role == "Customer") {
+                    header('Location: customer_dash.php');
+                } else {
+                    header('Location: index.php');
+                }
+                exit();
             } else {
-                header('Location: deliveryPerson.php');
+                $_SESSION['error_message'] = "Invalid email address or password.";
             }
-            exit();
         } else {
             $_SESSION['error_message'] = "Invalid email address or password.";
-            header("Location: login.php");
-            exit();
         }
+    
+        // Redirect back to the login page with an error message
+        header("Location: login.php");
+        exit();
     }
+    
 }
 ?>
 

@@ -194,7 +194,7 @@ if (!isset($_SESSION['email'])) {
                     </a>
                 </li><!-- End Dashboard Nav -->
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
                         <i class="bi bi-person-fill-add"></i>
                         <span>Delivery Person</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -206,7 +206,7 @@ if (!isset($_SESSION['email'])) {
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
@@ -221,6 +221,11 @@ if (!isset($_SESSION['email'])) {
                         <li>
                             <a href="#">
                                 <i class="bi bi-circle"></i><span>Delivery Received</span>
+                            </a>
+                        </li>  
+                        <li>
+                            <a href="#">
+                                <i class="bi bi-circle"></i><span>View Vendors Detail</span>
                             </a>
                         </li>   
                     </ul>
