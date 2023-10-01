@@ -11,6 +11,46 @@ if (isset($_SESSION['color_name'])) {
     exit();
 }
 
+// if (isset($_POST['submit'])) {
+//     $newName = mysqli_real_escape_string($con, $_POST['color']);
+    
+//     $sql = "SELECT * FROM tblcolor WHERE id != '$id'";
+//     $result = mysqli_query($con, $sql);
+
+//     if ($result) {
+//         $isSimilar = false;
+
+//         while ($row = mysqli_fetch_assoc($result)) {
+//             $name1 = strtolower($row["name"]);
+//             $newNameLower = strtolower($newName);
+
+//             similar_text($newNameLower, $name1, $similarity);
+
+//             if ($similarity >= 50) {
+//                 $isSimilar = true;
+//                 break;
+//             }
+//         }
+
+//         if ($isSimilar) {
+//             $_SESSION['error'] = "Color name is too similar to an existing color.";
+//         } else {
+//             $query = "UPDATE tblcolor SET name = '$newName' WHERE id = '$id'";
+//             $query_run = mysqli_query($con, $query);
+
+//             if ($query_run) {
+//                 $_SESSION['success'] = "Color updated successfully";
+//                 // Clear session data
+//                 unset($_SESSION['color_name']);
+//                 unset($_SESSION['id']);
+//                 echo '<script>window.location.href = "viewColor.php";</script>';
+//                 exit();
+//             } else {
+//                 $_SESSION['error'] = "Error updating color: " . mysqli_error($con);
+//             }
+//         }
+//     }
+// }
 if (isset($_POST['submit'])) {
     $newName = mysqli_real_escape_string($con, $_POST['color']);
     
@@ -24,9 +64,10 @@ if (isset($_POST['submit'])) {
             $name1 = strtolower($row["name"]);
             $newNameLower = strtolower($newName);
 
-            similar_text($newNameLower, $name1, $similarity);
+            $levenshteinDistance = levenshtein($newNameLower, $name1);
 
-            if ($similarity >= 50) {
+            // You can adjust this threshold as needed
+            if ($levenshteinDistance <= 2) {
                 $isSimilar = true;
                 break;
             }
@@ -51,6 +92,7 @@ if (isset($_POST['submit'])) {
         }
     }
 }
+
 ?>
 
 <!DOCTYPE html>

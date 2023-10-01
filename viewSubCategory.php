@@ -8,16 +8,16 @@ if (isset($_REQUEST['update'])) {
         $_SESSION['category_name'] = $_POST['category_name'];
         $_SESSION['id'] = $_POST['categoryid'];
         //header("Location: updateCategory.php");
-        echo '<script>window.location.href = "updateCategory.php";</script>';
+        echo '<script>window.location.href = "updateSubCategory.php";</script>';
     } else {
-        echo '<script>window.location.href = "viewCategory.php";</script>';
+        echo '<script>window.location.href = "viewSubCategory.php";</script>';
     }
 }
 
 if (isset($_REQUEST['delete'])) {
     if (isset($_POST['categoryid'])) {
         $categoryid = $_POST['categoryid'];
-        $query_delete = "DELETE FROM tbltype WHERE id = '$categoryid'";
+        $query_delete = "DELETE FROM tblcategory WHERE id = '$categoryid'";
         $query_run_delete = mysqli_query($con, $query_delete);
 
         if ($query_run_delete) {
@@ -33,7 +33,7 @@ if (isset($_REQUEST['delete'])) {
 if (isset($_REQUEST['deActive'])) {
     if (isset($_POST['categoryid'])) {
         $categoryid = $_POST['categoryid'];
-        $update_query = "UPDATE tbltype SET status = 0 WHERE id = ?";
+        $update_query = "UPDATE tblcategory SET status = 0 WHERE id = ?";
         $stmt = mysqli_prepare($con, $update_query);
         mysqli_stmt_bind_param($stmt, "i", $categoryid);
         $query_run = mysqli_stmt_execute($stmt);
@@ -51,7 +51,7 @@ if (isset($_REQUEST['deActive'])) {
 if (isset($_REQUEST['active'])) {
     if (isset($_POST['categoryid'])) {
         $categoryid = $_POST['categoryid'];
-        $update_query = "UPDATE tbltype SET status = 1 WHERE id = ?";
+        $update_query = "UPDATE tblcategory SET status = 1 WHERE id = ?";
         $stmt = mysqli_prepare($con, $update_query);
         mysqli_stmt_bind_param($stmt, "i", $categoryid);
         $query_run = mysqli_stmt_execute($stmt);
@@ -128,11 +128,11 @@ if (isset($_REQUEST['active'])) {
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header mt-4">
-                                        <h1>Categories </h1>
+                                        <h1>Sub Categories </h1>
                                     </div>
                                     <div class="card-body">
                                         <table class="table table-bordered text-center" style="width:90%; margin: auto">
-                                            <button class="btn btn-primary"><a href="category.php" style="color:white">Add</a></button>
+                                            <button class="btn btn-primary"><a href="subCategory.php" style="color:white">Add</a></button>
 
                                             <thead>
                                                 <tr>
@@ -145,7 +145,7 @@ if (isset($_REQUEST['active'])) {
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $query = "SELECT * FROM tbltype";
+                                                $query = "SELECT * FROM tblcategory";
                                                 $query_run = mysqli_query($con, $query);
 
                                                 if (mysqli_num_rows($query_run) > 0) {

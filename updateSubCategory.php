@@ -7,14 +7,14 @@ if (isset($_SESSION['category_name'])) {
     $name = $_SESSION['category_name'];
     $id = $_SESSION['id'];
 } else {
-    echo '<script>window.location.href = "viewCategory.php";</script>';
+    echo '<script>window.location.href = "viewSubCategory.php";</script>';
     exit();
 }
 
 if (isset($_POST['submit'])) {
     $newName = mysqli_real_escape_string($con, $_POST['category']);
     
-    $sql = "SELECT * FROM tbltype WHERE id != '$id'";
+    $sql = "SELECT * FROM tblcategory WHERE id != '$id'";
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -36,15 +36,15 @@ if (isset($_POST['submit'])) {
         if ($isSimilar) {
             $_SESSION['error'] = "Category name is too similar to an existing category.";
         } else {
-            $query = "UPDATE tbltype SET name = '$newName' WHERE id = '$id'";
+            $query = "UPDATE tblcategory SET name = '$newName' WHERE id = '$id'";
             $query_run = mysqli_query($con, $query);
 
             if ($query_run) {
-                $_SESSION['success'] = "Category updated successfully";
+                $_SESSION['success'] = "SUb Category updated successfully";
                 // Clear session data
                 unset($_SESSION['category_name']);
                 unset($_SESSION['id']);
-                echo '<script>window.location.href = "viewCategory.php";</script>';
+                echo '<script>window.location.href = "viewSubCategory.php";</script>';
                 exit();
             } else {
                 $_SESSION['error'] = "Error updating category: " . mysqli_error($con);
@@ -119,7 +119,7 @@ if (isset($_POST['submit'])) {
                     
                     <form method="post" action="" name="updateCategory" onsubmit="return validateForm()">
                         <div class="form-group">
-                            <h2 style="text-align: center">Update Category</h2>
+                            <h2 style="text-align: center">Update Sub Category</h2>
                             <div>
                                 <label for="name" style="margin-left: 10px">Category Name:</label>
                                 <input type="text" name="category" class="form-control" id="name" style="margin-left: 10px" value="<?php echo $name; ?>">
@@ -155,10 +155,10 @@ if (isset($_POST['submit'])) {
                 document.getElementById("categoryError").innerHTML = "";
 
                 if (category === "") {
-                    document.getElementById("categoryError").innerHTML = "Category name is required.";
+                    document.getElementById("categoryError").innerHTML = "Sub Category name is required.";
                     isValid = false;
                 } else if (!/^[a-zA-Z]+$/.test(category)) {
-                    document.getElementById("categoryError").innerHTML = "Category name must contain only alphabets.";
+                    document.getElementById("categoryError").innerHTML = "Sub Category name must contain only alphabets.";
                     isValid = false;
                 }
                 return isValid;

@@ -24,9 +24,10 @@ if (isset($_POST['submit'])) {
             $name1 = strtolower($row["name"]);
             $newNameLower = strtolower($newName);
 
-            similar_text($newNameLower, $name1, $similarity);
+            $levenshteinDistance = levenshtein($newNameLower, $name1);
 
-            if ($similarity >= 50) {
+            // You can adjust this threshold as needed
+            if ($levenshteinDistance <= 2) {
                 $isSimilar = true;
                 break;
             }
@@ -51,6 +52,7 @@ if (isset($_POST['submit'])) {
         }
     }
 }
+
 ?>
 
 <!DOCTYPE html>

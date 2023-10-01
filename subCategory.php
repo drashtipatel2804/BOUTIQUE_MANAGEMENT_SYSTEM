@@ -5,7 +5,7 @@ if (isset($_REQUEST['submit'])) {
 
     $name = $_REQUEST['name'];
 
-    $sql = "select * from tbltype";
+    $sql = "select * from tblcategory";
 
     $result = mysqli_query($con, $sql);
 
@@ -27,16 +27,16 @@ if (isset($_REQUEST['submit'])) {
         if ($isSimilar) {
             $err = "Category already exists";
         } else {
-            $query = "insert into tbltype (name,status) values ('$name',1)";
+            $query = "insert into tblcategory (name,status) values ('$name',1)";
             mysqli_query($con, $query);
             $success = "Successfull add category";
-            echo '<script>window.location.href = "viewCategory.php";</script>';
+            echo '<script>window.location.href = "viewSubCategory.php";</script>';
         }
     } else {
-        $query = "insert into tbltype (name,status) values ('$name',1)";
+        $query = "insert into tblcategory (name,status) values ('$name',1)";
         mysqli_query($con, $query);
         $success = "Successfull add category";
-        echo '<script>window.location.href = "viewCategory.php";</script>';
+        echo '<script>window.location.href = "viewSubCategory.php";</script>';
     }
 }
 ?>
@@ -124,14 +124,14 @@ if (isset($_REQUEST['submit'])) {
                         <div class="btn_pos">
                             <button type="submit" name="submit" class="btn btn-primary">Add</button>
                             <button type="submit" name="cancel" class="btn btn-danger">
-                                <a href="viewCategory.php" style="color: white">Cancel</a>
+                                <a href="viewSubCategory.php" style="color: white">Cancel</a>
                             </button>
                         </div>
                         <div class="error"><?php echo isset($err) ? $err : ''; ?></div>
                         <div class="error"><?php echo isset($success) ? $success : ''; ?></div>
                         <?php
                         if (isset($success)) {
-                            echo '<script>window.location.href = "viewCategory.php";</script>';
+                            echo '<script>window.location.href = "viewSubCategory.php";</script>';
                             exit(); // Ensure no more output is sent to the browser
                         }
                         ?>

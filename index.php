@@ -194,43 +194,21 @@ if (!isset($_SESSION['email'])) {
                     </a>
                 </li><!-- End Dashboard Nav -->
 
-                <!-- <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-person-fill-add"></i>
-                        <span>Delivery Person</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="DRegistration.php">
-                                <i class="bi bi-circle"></i><span>Add Delivery Person</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li> -->
-
+                
+                <!--Vendors -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-journal-text"></i><span>Vendors</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link collapsed" href="viewVendor.php">
+                        <i class="bi bi-journal-text"></i><span>Vendors</span><i class="bi bi-chevron-right ms-auto"></i>
                     </a>
-                    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="#">
-                                <i class="bi bi-circle"></i><span>Add Order Details</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="bi bi-circle"></i><span>Delivery Received</span>
-                            </a>
-                        </li>  
-                        <li>
-                            <a href="#">
-                                <i class="bi bi-circle"></i><span>View Vendors Detail</span>
-                            </a>
-                        </li>   
-                    </ul>
                 </li>
 
+                <!--Inventory -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="viewinventory.php">
+                        <i class="bi bi-journal-text"></i><span>Inventory</span><i class="bi bi-chevron-right ms-auto"></i>
+                    </a>
+                </li>
+                
                 <!--Category-->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="viewCategory.php">
@@ -241,11 +219,19 @@ if (!isset($_SESSION['email'])) {
                 
                 <!--Sub Category-->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="viewCategory.php">
+                    <a class="nav-link collapsed" href="viewSubCategory.php">
                         <i class="bi bi-layout-text-window-reverse"></i><span>Sub Categories Master</span><i class="bi bi-chevron-right ms-auto"></i>
                     </a>
                 </li>
                 <!-- End SUb Category-->
+                
+                <!--All Categories-->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="viewCategoryEntry.php">
+                        <i class="bi bi-layout-text-window-reverse"></i><span>All Categories Master</span><i class="bi bi-chevron-right ms-auto"></i>
+                    </a>
+                </li>
+                <!-- End All Categories-->
 
                 <!--color-->
                 <li class="nav-item">
